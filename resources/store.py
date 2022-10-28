@@ -1,5 +1,4 @@
 from flask_restful import Resource, reqparse
-from flask_jwt import jwt_required
 from models.store import StoreModel
 
 class Store(Resource):
@@ -33,4 +32,4 @@ class Store(Resource):
 
 class StoreList(Resource):
     def get(self):
-        return {'stores': [store.json() for store in StoreModel.query.all()]}
+        return {'stores': [store.json() for store in StoreModel.find_all()]}
