@@ -2,6 +2,7 @@ from flask import Flask, jsonify
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
 
+from ma import ma
 from blacklist import BLACKLIST
 from db import db
 from resources.user import UserRegister, User, UserLogin, UserLogout, TokenRefresh
@@ -38,4 +39,5 @@ api.add_resource(TokenRefresh, "/refresh")
 
 if __name__ == "__main__":
     db.init_app(app)
+    ma.init_app(app)
     app.run(debug=True)
