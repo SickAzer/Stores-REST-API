@@ -8,7 +8,6 @@ class UserModel(db.Model):
     username = db.Column(db.String(80), nullable=False, unique=True)
     password = db.Column(db.String(80), nullable=False)
 
-
     def save_to_db(self) -> None:
         db.session.add(self)
         db.session.commit()
