@@ -7,8 +7,7 @@ from flask_jwt_extended import (
     jwt_required,
     get_jwt,
 )
-from flask_restful import Resource, reqparse
-from marshmallow import ValidationError
+from flask_restful import Resource
 from blacklist import BLACKLIST
 from models.user import UserModel
 from schemas.user import UserSchema
@@ -20,6 +19,8 @@ USER_NOT_FOUND = "User not found."
 USER_DELETED = "User deleted."
 INVALID_CREDENTIALS = "Invalid credentials!"
 USER_LOGGED_OUT = "User <id={}> successfully logged out."
+NOT_CONFIRMED_ERROR = "You have not confirmed registaration, please check your email <{}>."
+USER_CONFIRMED = "User confirmed."
 
 
 str_to_bytes = lambda s: s.encode("utf-8") if isinstance(s, str) else s
@@ -67,9 +68,11 @@ class UserLogin(Resource):
         user = UserModel.find_by_username(user_data.username)
         # check password
         if user and safe_str_cmp(user.password, user_data.password):
-            access_token = create_access_token(identity=user.id, fresh=True)
-            refresh_token = create_refresh_token(user.id)
-            return {"access_token": access_token, "refresh_token": refresh_token}, 200
+            if user.actavated:
+                access_token = create_access_token(identity=user.id, fresh=True)
+                refresh_token = create_refresh_token(user.id)
+                return {"access_token": access_token, "refresh_token": refresh_token}, 200
+            return {"message": NOT_CONFIRMED_ERROR.format(user.username)}, 400
         return {"message": INVALID_CREDENTIALS}, 401
 
 
@@ -89,3 +92,14 @@ class TokenRefresh(Resource):
         current_user = get_jwt_identity()
         new_token = create_access_token(identity=current_user, fresh=False)
         return {"access_token": new_token}, 200
+
+
+class UserConfirm(Resource):
+    @classmethod
+    def get(cls, user_id: int):
+        user = UserModel.find_by_id(user_id)
+        if not user:
+            return {"messsage": USER_NOT_FOUND}, 404
+        user.actavated = True
+        user.save_to_db()
+        return {"messsage": USER_CONFIRMED}, 200
