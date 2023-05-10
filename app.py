@@ -18,8 +18,7 @@ from resources.item import Item, ItemList
 from resources.store import Store, StoreList
 
 app = Flask(__name__)
-# with app.app_context():
-#     db.create_all()
+
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///data.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["PROPAGATE_EXCEPTIONS"] = True
@@ -27,11 +26,6 @@ app.config["JWT_BLACKLIST_ENABLED"] = True
 app.config["JWT_BLACKLIST_TOKEN_CHECKS"] = ["access", "refresh"]
 app.secret_key = "max"  # app.config['JWT_SECRET_KEY']
 api = Api(app)
-
-
-# @app.before_first_request
-# def create_tables():
-#     db.create_all()
 
 
 @app.errorhandler(ValidationError)
@@ -61,5 +55,7 @@ api.add_resource(TokenRefresh, "/refresh")
 
 if __name__ == "__main__":
     db.init_app(app)
+    with app.app_context():
+        db.create_all()
     ma.init_app(app)
     app.run(debug=True)

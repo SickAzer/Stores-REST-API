@@ -1,5 +1,5 @@
 import hmac
-from flask import request
+from flask import request, make_response, render_template, redirect
 from flask_jwt_extended import (
     create_access_token,
     create_refresh_token,
@@ -33,7 +33,8 @@ user_schema = UserSchema()
 class UserRegister(Resource):
     @classmethod
     def post(cls):
-        user = user_schema.load(request.get_json())
+        user_json = request.get_json()
+        user = user_schema.load(user_json)
 
         if UserModel.find_by_username(user.username):
             return {"message": USER_ALREADY_EXISTS}, 400
@@ -102,4 +103,11 @@ class UserConfirm(Resource):
             return {"messsage": USER_NOT_FOUND}, 404
         user.actavated = True
         user.save_to_db()
-        return {"messsage": USER_CONFIRMED}, 200
+        headers = {"Content-Type": "text/html"}
+        return make_response(render_template(
+            "confirmation_page.html",
+            email=user.username
+            ),
+            200,
+            headers
+        )
