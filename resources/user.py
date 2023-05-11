@@ -12,6 +12,7 @@ from flask_restful import Resource
 from blacklist import BLACKLIST
 from models.user import UserModel
 from schemas.user import UserSchema
+from libs.mailgun import MailgunException
 
 BLANK_ERROR = "'{}' cannot be blank."
 USER_ALREADY_EXISTS = "A user with that username already exists."
@@ -49,11 +50,13 @@ class UserRegister(Resource):
             user.save_to_db()
             user.send_confirmation_email()
             return {"message": SUCCESS_REGISTER_MESSAGE}, 201
-        
+        except MailgunException as e:
+            user.delete_from_db()
+            return {"message": str(e)}, 500
         except:
             traceback.print_exc()
             return {"message": FAILED_TO_CREATE}, 500
-        
+
 
 
 class User(Resource):
