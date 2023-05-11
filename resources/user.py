@@ -1,4 +1,5 @@
 import hmac
+import traceback
 from flask import request, make_response, render_template, redirect
 from flask_jwt_extended import (
     create_access_token,
@@ -14,13 +15,15 @@ from schemas.user import UserSchema
 
 BLANK_ERROR = "'{}' cannot be blank."
 USER_ALREADY_EXISTS = "A user with that username already exists."
-CREATED_SUCCESSFULLY = "User created successfully."
+EMAIL_ALREADY_EXISTS = "A user with that email already exists."
+SUCCESS_REGISTER_MESSAGE = "Account created successfully. An email with activation link has been sent to your email address."
 USER_NOT_FOUND = "User not found."
 USER_DELETED = "User deleted."
 INVALID_CREDENTIALS = "Invalid credentials!"
 USER_LOGGED_OUT = "User <id={}> successfully logged out."
 NOT_CONFIRMED_ERROR = "You have not confirmed registaration, please check your email <{}>."
 USER_CONFIRMED = "User confirmed."
+FAILED_TO_CREATE = "Internal server error. Failed to create user."
 
 
 str_to_bytes = lambda s: s.encode("utf-8") if isinstance(s, str) else s
@@ -39,9 +42,18 @@ class UserRegister(Resource):
         if UserModel.find_by_username(user.username):
             return {"message": USER_ALREADY_EXISTS}, 400
 
-        user.save_to_db()
+        if UserModel.find_by_email(user.email):
+            return {"message": EMAIL_ALREADY_EXISTS}, 400
 
-        return {"message": CREATED_SUCCESSFULLY}, 201
+        try:
+            user.save_to_db()
+            user.send_confirmation_email()
+            return {"message": SUCCESS_REGISTER_MESSAGE}, 201
+        
+        except:
+            traceback.print_exc()
+            return {"message": FAILED_TO_CREATE}, 500
+        
 
 
 class User(Resource):
@@ -64,7 +76,7 @@ class User(Resource):
 class UserLogin(Resource):
     @classmethod
     def post(cls):
-        user_data = user_schema.load(request.get_json())
+        user_data = user_schema.load(request.get_json(), partial=("email",))
 
         user = UserModel.find_by_username(user_data.username)
         # check password
