@@ -58,7 +58,6 @@ class UserRegister(Resource):
             return {"message": FAILED_TO_CREATE}, 500
 
 
-
 class User(Resource):
     @classmethod
     def get(cls, user_id: int):
