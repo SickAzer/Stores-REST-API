@@ -14,7 +14,7 @@ class UserModel(db.Model):
     email = db.Column(db.String(80), nullable=False, unique=True)
 
     confirmation = db.relationship(
-        "ConfirmaionModel", lazy="dynamic", cascade="all, delete-orphan"
+        "ConfirmationModel", lazy="dynamic", cascade="all, delete-orphan"
     )
 
     @property
@@ -50,4 +50,4 @@ class UserModel(db.Model):
         text = f"Please click the link to confirm your registration: {link}"
         html = f'<html>Please click the link to confirm your registration: <a href="{link}">{link}</a></html>'
 
-        return Mailgun.send_email(self.email, subject, text, html)
+        return Mailgun.send_confirmation_email(self.email, subject, text, html)
