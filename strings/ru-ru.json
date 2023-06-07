@@ -1,0 +1,32 @@
+{
+    "mailgun_failed_load_api_key": "Не удалось загрузить ключ MailGun API.",
+    "mailgun_failed_load_domain": "Не удалось загрузить домен MailGun.",
+    "mailgun_error_send_email": "Ошибка при отправке письма с подтверждением.",
+
+    "confirmation_not_found": "Подтверждение не найдено.",
+    "confirmation_expired": "Истек срок действия ссылки.",
+    "confirmation_already_confirmed": "Регистрация уже подтверждена.",
+    "confirmation_resend_successful": "Письмо с подтверждением отрпавлено повторно.",
+    "confirmation_resent_failed": "Внутренняя ошибка сервера. Не удалось отправить письмо с подтверждением.",
+
+    "item_name_already_exists": "Товар с названием {} уже существует.",
+    "item_not_found": "Товар не найден.",
+    "item_deleted": "Товар удален.",
+    "item_error_inserting": "Ошибка при добавлении товара.",
+
+    "store_already_exists": "Магазин с названием {} уже существует.",
+    "store_not_found": "Магазин не найден.",
+    "store_deleted": "Магазин удален.",
+    "store_error_inserting": "Ошибка при добавлении магагина.",
+
+    "user_username_already_exists": "Пользователь с таким именем уже существует.",
+    "user_email_already_exists": "Пользователь с такой электронной почтой уже существует.",
+    "user_success_register_message": "Учетная запись успешно создана. Письмо со ссылкой для активации было направлено на ваш электронный адрес.",
+    "user_not_found": "Пользователь не найден.",
+    "user_deleted": "Пользователь удален.",
+    "user_invalid_credentials": "Неверные данные для входа!",
+    "user_logged_out": "Пользователь <id={}> успешно вышел из системы.",
+    "user_not_confirmed_error": "Вы не подтвердили регистрацию, пожалуйста, проверьте вашу электронную почту <{}>.",
+    "user_confirmed": "Регистрация пользователя подтверждена.",
+    "user_failed_to_create": "Внутренняя ошибка сервера. Не удалось создать пользователя."
+}
