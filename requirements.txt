@@ -6,3 +6,5 @@ flask-marshmallow
 marshmallow-sqlalchemy
 requests
 python-dotenv
+flask-uploads
+Flask-Reuploaded

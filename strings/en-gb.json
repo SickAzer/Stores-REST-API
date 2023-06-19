@@ -28,5 +28,15 @@
     "user_logged_out": "User <id={}> successfully logged out.",
     "user_not_confirmed_error": "You have not confirmed registaration, please check your email <{}>.",
     "user_confirmed": "User confirmed.",
-    "user_failed_to_create": "Internal server error. Failed to create user."
+    "user_failed_to_create": "Internal server error. Failed to create user.",
+    "image_uploaded": "Image {} uploaded.",
+    "image_illegal_extention": "Extention '{}' is not allowed.",
+    "image_illegal_file_name": "Illegal filename '{}' requested.",
+    "image_not_found": "Image '{}' not found.",
+    "image_deleted": "Image '{}' deleted.",
+    "image_delete_failed": "Failed to delete image.",
+    "avatar_delete failed": "Internal server error. Failed to delete avatar.",
+    "avatar_uploaded": "Avatar '{}' uploaded.",
+    "avatar_not_found": "Avatar_not_found"
+
 }
